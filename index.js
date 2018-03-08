@@ -2,6 +2,7 @@ const ZwiftAccount = require('zwift-mobile-api');
 const Result = require('./results');
 const account = new ZwiftAccount("ridings.mark@gmail.com", "Acesfull1");
 const event = account.getEvent();
+const posts = require('./posts');
 
 function msToTime(duration) {
     var milliseconds = parseInt((duration%1000)/100)
@@ -27,16 +28,20 @@ const options = {
 };
 
 event.search(options).then(races => {
+    //console.log(races[0]);
+    const raceId = races[0].id;
+    const raceName = races[0].name;
     const subGroups = races[0].eventSubgroups;
     const results = new Result();
 
     results.getResults(subGroups).then(raceResults => {
         //console.log(raceResults);
-        let j = 0;
-        for (let i = 0; i < raceResults.length; i++) {
-            console.log(`${j}. ${raceResults[i].firstName} ${raceResults[i].lastName} - ${msToTime(raceResults[i].elapsedMs)} | ${(raceResults[i].power / (raceResults[i].weight / 1000)).toFixed(2)}`);
-            j++;
-        }
+        // let j = 0;
+        // for (let i = 0; i < raceResults.length; i++) {
+        //     console.log(`${j}. ${raceResults[i].firstName} ${raceResults[i].lastName} - ${msToTime(raceResults[i].elapsedMs)} | ${(raceResults[i].power / (raceResults[i].weight / 1000)).toFixed(2)}`);
+        //     j++;
+        // }
+        posts.postResults(raceId, raceName, raceResults);
     }).catch(function(err) {
         console.log("ERROR: ", err);
     });
