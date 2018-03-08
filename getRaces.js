@@ -1,5 +1,5 @@
 const ZwiftAccount = require('zwift-mobile-api');
-const account = new ZwiftAccount("ridings.mark@gmail.com", "Acesfull1");
+const account = new ZwiftAccount("__username__", "__password__");
 
 const events = account.getEvent();
 
